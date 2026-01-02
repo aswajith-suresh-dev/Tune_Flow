@@ -11,7 +11,7 @@ import UserLibrary from "./pages/UserLibrary";
 
 function App() {
   const [songs, setSongs] = useState([]);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState(localStorage.getItem("role"));
 
   // 🔁 Load auth state ONCE
   useEffect(() => {
