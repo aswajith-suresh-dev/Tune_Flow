@@ -1,28 +1,33 @@
 import { useEffect, useState } from "react";
 
-function UserLibrary({ songs }) {
+function UserLibrary({ songs = [] }) {
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState("");
 
   const token = localStorage.getItem("token");
 
-  // 🔁 Fetch playlists
+  /* ---------------- FETCH PLAYLISTS ---------------- */
   const fetchPlaylists = async () => {
-    const res = await fetch("/api/playlists/mine", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await res.json();
-    setPlaylists(data);
+    try {
+      const res = await fetch("/api/playlists/mine", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      setPlaylists(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to fetch playlists", err);
+    }
   };
 
   useEffect(() => {
     fetchPlaylists();
   }, []);
 
-  // ➕ Create playlist
+  /* ---------------- CREATE PLAYLIST ---------------- */
   const createPlaylist = async () => {
     if (!newPlaylistName.trim()) return;
 
@@ -39,14 +44,14 @@ function UserLibrary({ songs }) {
     fetchPlaylists();
   };
 
-  // ➕ Add song to playlist
+  /* ---------------- ADD SONG ---------------- */
   const addSongToPlaylist = async (songId) => {
     if (!selectedPlaylist) {
       alert("Select a playlist first");
       return;
     }
 
-    await fetch("/api/playlists/add-song", {
+    const res = await fetch("/api/playlists/add-song", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,9 +63,22 @@ function UserLibrary({ songs }) {
       }),
     });
 
-    fetchPlaylists();
+    const updatedPlaylist = await res.json();
+
+    // 🔥 REAL-TIME STATE UPDATE
+    setPlaylists((prev) =>
+      prev.map((pl) =>
+        pl._id === updatedPlaylist._id ? updatedPlaylist : pl
+      )
+    );
+
+    setSelectedPlaylist(updatedPlaylist);
   };
 
+  /* ---------------- SAFE ACCESS ---------------- */
+  const playlistSongs = selectedPlaylist?.songs || [];
+
+  /* ---------------- UI ---------------- */
   return (
     <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
       <h1>🎧 My Library</h1>
@@ -76,14 +94,21 @@ function UserLibrary({ songs }) {
       </div>
 
       <div style={{ display: "flex", gap: "30px" }}>
-        {/* LEFT: PLAYLISTS */}
+        {/* PLAYLIST LIST */}
         <div style={{ width: "30%" }}>
           <h3>🎵 Playlists</h3>
+
+          {playlists.length === 0 && <p>No playlists yet</p>}
 
           {playlists.map((pl) => (
             <div
               key={pl._id}
-              onClick={() => setSelectedPlaylist(pl)}
+              onClick={() =>
+                setSelectedPlaylist({
+                  ...pl,
+                  songs: Array.isArray(pl.songs) ? pl.songs : [],
+                })
+              }
               style={{
                 padding: "8px",
                 cursor: "pointer",
@@ -99,15 +124,14 @@ function UserLibrary({ songs }) {
           ))}
         </div>
 
-        {/* RIGHT: SONGS */}
+        {/* SONG LIST */}
         <div style={{ width: "70%" }}>
           <h3>➕ All Songs</h3>
 
           {songs.map((song) => {
-            const alreadyAdded =
-              selectedPlaylist?.songs?.some(
-                (s) => s._id === song._id
-              );
+            const alreadyAdded = playlistSongs.some(
+              (s) => String(s._id) === String(song._id)
+            );
 
             return (
               <div
@@ -139,11 +163,9 @@ function UserLibrary({ songs }) {
         <div style={{ marginTop: "30px" }}>
           <h3>📂 {selectedPlaylist.name}</h3>
 
-          {selectedPlaylist.songs.length === 0 && (
-            <p>No songs yet</p>
-          )}
+          {playlistSongs.length === 0 && <p>No songs yet</p>}
 
-          {selectedPlaylist.songs.map((song) => (
+          {playlistSongs.map((song) => (
             <p key={song._id}>
               🎶 {song.title} – {song.artist}
             </p>
