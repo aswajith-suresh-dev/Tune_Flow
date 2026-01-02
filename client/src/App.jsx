@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Login from "./pages/Login";
+import UserLibrary from "./pages/UserLibrary";
 
 function App() {
   const [songs, setSongs] = useState([]);
@@ -54,13 +55,14 @@ function App() {
             <Link to="/admin">Admin</Link>
           </>
         )}
-
+{role === "user" && <> | <Link to="/library">My Library</Link></>}
         {role && (
           <>
             {" | "}
             <button onClick={handleLogout}>Logout</button>
           </>
         )}
+        
       </nav>
 
       {/* 🔹 ROUTES */}
@@ -82,6 +84,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/library" element={<UserLibrary songs={songs} />} />
       </Routes>
     </BrowserRouter>
   );
