@@ -34,6 +34,7 @@ export const getMyPlaylists = async (req, res) => {
 };
 
 // ADD SONG TO PLAYLIST
+// ADD SONG TO PLAYLIST (BACKEND)
 export const addSongToPlaylist = async (req, res) => {
   try {
     const { playlistId, songId } = req.body;
@@ -52,7 +53,11 @@ export const addSongToPlaylist = async (req, res) => {
       await playlist.save();
     }
 
-    res.json(playlist);
+    const updatedPlaylist = await Playlist.findById(
+      playlist._id
+    ).populate("songs");
+
+    res.json(updatedPlaylist);
   } catch (error) {
     res.status(500).json({ message: "Failed to add song" });
   }
