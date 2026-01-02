@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authApi";
 
-function Login() {
+function Login({ setRole }) {
     
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -19,23 +19,24 @@ const handleSubmit = async (e) => {
     console.log("Login response:", data);
 
     if (!data.token) {
-      setError("Invalid login response");
-      return;
-    }
+  setError("Invalid login response");
+  return;
+}
 
-    // ✅ STORE AUTH DATA CORRECTLY
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.user.role);
-    localStorage.setItem("userId", data.user.id);
+// ✅ STORE AUTH DATA
+localStorage.setItem("token", data.token);
+localStorage.setItem("role", data.user.role);
+localStorage.setItem("userId", data.user.id);
 
-    console.log("Stored in localStorage ✅");
+// ✅ UPDATE REACT STATE (THIS WAS MISSING)
+setRole(data.user.role);
 
-    // ✅ REDIRECT
-    if (data.user.role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/");
-    }
+// ✅ REDIRECT
+if (data.user.role === "admin") {
+  navigate("/admin");
+} else {
+  navigate("/");
+}
 
   } catch (err) {
     console.error("Login failed ❌", err);
