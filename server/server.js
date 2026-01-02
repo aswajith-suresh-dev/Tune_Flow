@@ -36,7 +36,7 @@ import path from "path";
 // ROUTES
 import songRoutes from "./routes/SongRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-
+import playlistRoutes from "./routes/PlaylistRoutes.js";
 // CONFIG
 dotenv.config();
 
@@ -62,7 +62,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use("/api/songs", songRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use("/api/playlists", playlistRoutes);
 // Health check
 app.get("/", (req, res) => {
   res.send("🎵 Music Player API running");
