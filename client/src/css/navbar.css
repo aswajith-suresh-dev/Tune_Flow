@@ -1,30 +1,33 @@
-*{
-    font-family: 'Halvatica';
-}
+/* NAVBAR */
 .navbar {
-  position: relative;
-  height: 80px;
-  padding: 0 24px;
-  /* border-bottom: 1px solid #e5e7eb; */
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 90px;
+
   display: flex;
-  background-color: #111827;
   align-items: center;
+border-bottom:1px solid #94A388 ;
+  background-color: #34176A;
+  
+  z-index: 1000;
 }
 
 /* LEFT */
 .nav-left {
+  margin-left: 40px;          /* ✅ exact spacing */
   font-weight: 600;
-  font-size: 28px;
-  color:#f8fafc;
-  margin-left: 30px;
+  font-size: 30px;
+  color: #f8fafc;
 }
 
-/* CENTER — ABSOLUTE */
+/* CENTER */
 .nav-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
   display: flex;
+  justify-content: center;    /* ✅ true center */
   gap: 24px;
 }
 
@@ -34,16 +37,21 @@
   font-size: 20px;
 }
 
+.nav-center a:hover {
+  color: #f8fafc;
+}
 
 /* RIGHT */
 .nav-right {
-  margin-left: auto;
+  margin-right: 30px;         /* ✅ exact spacing */
+  display: flex;
+  align-items: center;
 }
 
 .nav-right button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 28px;
-  color:white;
+  font-size: 30px;
+  color: #f8fafc;
 }

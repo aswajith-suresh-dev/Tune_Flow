@@ -7,11 +7,11 @@ function Landing() {
       <section className="hero">
         <h1>Feel the Music</h1>
         <p>
-          Stream, organize, and enjoy your favorite tracks in one place.
+          All your music one place.
         </p>
         <div className="hero-actions">
           <a href="/login" className="primary-btn">Get Started</a>
-          <a href="/home" className="secondary-btn">Explore Music</a>
+          {/* <a href="/home" className="secondary-btn">Explore Music</a> */}
         </div>
       </section>
 <section className="features">
@@ -20,9 +20,9 @@ function Landing() {
     
     <div className="feature text">
       <h2>Create Playlists</h2>
-      <p>
-        Organize your favorite songs into playlists and enjoy
-        music your way.
+      <p>Organize your favorite songs into playlists and enjoy music your way.
+Build playlists for focus, fun, or late-night sessions.
+Your music, structured just the way you like it.
       </p>
     </div>
 
@@ -36,9 +36,8 @@ function Landing() {
 
     <div className="feature text">
       <h2>Powerful Music Player</h2>
-      <p>
-        Play, pause, skip, and control your music with a clean,
-        modern player.
+      <p>Play, pause, skip, and take full control of your music with a clean, modern player.
+Enjoy a smooth listening experience designed to keep the focus on your sound, not distractions.
       </p>
     </div>
 

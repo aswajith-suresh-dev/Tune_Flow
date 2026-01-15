@@ -84,7 +84,6 @@ const togglePlay = () => {
 };
   return (
     <div className="home-container">
-      <h1 style={{ textAlign: "center" }}>🎶 Music Player</h1>
 
       {songs.length === 0 && <p>No songs found</p>}
       <div className="songs-grid">
@@ -108,7 +107,7 @@ const togglePlay = () => {
   <div className="player-box">
     {/* SONG INFO */}
     <div className="player-info">
-      <strong>{currentSong.title}</strong>
+      <strong>{currentSong.title}</strong><br />
       <span>{currentSong.artist}</span>
     </div>
 

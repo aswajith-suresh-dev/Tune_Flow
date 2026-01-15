@@ -1,0 +1,96 @@
+/* PAGE */
+.admin-page {
+  min-height: 100vh;
+  padding: 40px 60px;
+  background-color: #f8fafc;
+  color: #94a3b8;
+}
+
+/* TITLE */
+.admin-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+/* LAYOUT */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* FORM */
+.admin-form {
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.admin-form h2 {
+  margin-bottom: 16px;
+}
+
+.admin-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: #f8fafc;
+  border: 1px solid #334155;
+  color: #f8fafc;
+}
+
+.admin-form button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  background: #6366f1;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* SONG LIST */
+.admin-songs {
+  background: #111827;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.admin-songs ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* SONG ITEM */
+.admin-song-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #020617;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  color:#94a3b8;
+}
+
+.admin-actions button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+/* BUTTON COLORS */
+.admin-edit {
+  background: #f59e0b;
+  color: black;
+}
+
+.admin-delete {
+  background: #ef4444;
+  color: white;
+}

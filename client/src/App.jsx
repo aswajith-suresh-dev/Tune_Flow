@@ -31,6 +31,12 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar role={role} onLogout={handleLogout} />
+    
+
+  <div className="app-content">
+    <Routes>{/* routes */}</Routes>
+  </div>
+
       <Routes>
         {/* 🌍 Public Landing */}
         <Route path="/" element={<Landing />} />

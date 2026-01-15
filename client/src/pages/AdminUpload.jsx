@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../css/admin.css";
 
 function AdminUpload({ onUploadSuccess, songs = [] }) {
   const [editingSong, setEditingSong] = useState(null);
@@ -20,9 +21,7 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
       if (editingSong) {
         response = await fetch(`/api/songs/${editingSong._id}`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title, artist }),
         });
       }
@@ -51,7 +50,6 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
 
       alert(editingSong ? "Song updated 🎶" : "Song uploaded 🎵");
 
-      // reset form
       setTitle("");
       setArtist("");
       setFile(null);
@@ -65,23 +63,19 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
 
   // 🔹 DELETE
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this song?")) return;
+    if (!window.confirm("Delete this song?")) return;
 
     try {
-      const res = await fetch(`/api/songs/${id}`, {
-        method: "DELETE",
-      });
-
+      const res = await fetch(`/api/songs/${id}`, { method: "DELETE" });
       const data = await res.json();
       alert(data.message);
-
       onUploadSuccess();
     } catch {
       alert("Delete failed");
     }
   };
 
-  // 🔹 EDIT (prefill form)
+  // 🔹 EDIT
   const handleEdit = (song) => {
     setEditingSong(song);
     setTitle(song.title);
@@ -89,112 +83,70 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      {/* FORM */}
-      <div
-        style={{
-          width: "320px",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          marginBottom: "20px",
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: "15px" }}>
-          {editingSong ? "Edit Song ✏️" : "Admin – Upload Song 🎵"}
-        </h2>
+    <div className="admin-page">
+      <h1 className="admin-title">🎛 Admin Dashboard</h1>
 
-        <input
-          type="text"
-          placeholder="Song Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+      <div className="admin-layout">
+        {/* LEFT: FORM */}
+        <div className="admin-form">
+          <h2>{editingSong ? "Edit Song ✏️" : "Upload Song 🎵"}</h2>
 
-        <input
-          type="text"
-          placeholder="Artist Name"
-          value={artist}
-          onChange={(e) => setArtist(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-
-        {!editingSong && (
           <input
-            type="file"
-            accept="audio/*"
-            onChange={(e) => setFile(e.target.files[0])}
-            style={{ marginBottom: "10px" }}
+            type="text"
+            placeholder="Song Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
-        )}
 
-        <button style={{ width: "100%" }} onClick={handleSave}>
-          {editingSong ? "Save Changes" : "Upload Song"}
-        </button>
-      </div>
+          <input
+            type="text"
+            placeholder="Artist Name"
+            value={artist}
+            onChange={(e) => setArtist(e.target.value)}
+          />
 
-      {/* SONG LIST */}
-      <div style={{ width: "320px" }}>
-        <h3>Uploaded Songs</h3>
+          {!editingSong && (
+            <input
+              type="file"
+              accept="audio/*"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          )}
 
-        {songs.length === 0 && <p>No songs available</p>}
+          <button onClick={handleSave}>
+            {editingSong ? "Save Changes" : "Upload Song"}
+          </button>
+        </div>
 
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {songs.map((song) => (
-            <li
-              key={song._id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "8px",
-                border: "1px solid #ccc",
-                padding: "6px",
-                borderRadius: "5px",
-              }}
-            >
-              <span>{song.title}</span>
+        {/* RIGHT: SONG LIST */}
+        <div className="admin-songs">
+          <h3>Uploaded Songs</h3>
 
-              <div>
-                <button
-                  onClick={() => handleEdit(song)}
-                  style={{
-                    marginRight: "5px",
-                    background: "orange",
-                    border: "none",
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Edit
-                </button>
+          {songs.length === 0 && <p>No songs available</p>}
 
-                <button
-                  onClick={() => handleDelete(song._id)}
-                  style={{
-                    background: "red",
-                    color: "white",
-                    border: "none",
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+          <ul>
+            {songs.map((song) => (
+              <li key={song._id} className="admin-song-item">
+                <span>{song.title}</span>
+
+                <div className="admin-actions">
+                  <button
+                    className="admin-edit"
+                    onClick={() => handleEdit(song)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="admin-delete"
+                    onClick={() => handleDelete(song._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

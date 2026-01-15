@@ -154,8 +154,8 @@ const playPrev = () => {
 
   /* ---------------- UI ---------------- */
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 className="library-title">🎧 My Library</h1>
+    <div style={{ padding: "20px", marginTop:"100px"}}>
+      <h1 className="library-title"> My Playlists</h1>
 
       <div style={{ display: "flex", gap: "30px" }}>
         {/* LEFT PANEL */}
