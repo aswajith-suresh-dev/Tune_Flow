@@ -1,94 +1,138 @@
 import { useEffect, useRef, useState } from "react";
+import "../css/Home.css";
 
 function Home({ songs }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
 
   const [currentIndex, setCurrentIndex] = useState(null);
 
-  const currentSong =
-    currentIndex !== null ? songs[currentIndex] : null;
-
+const currentSong =
+  currentIndex !== null && songs && songs.length > 0
+    ? songs[currentIndex]
+    : null;
   // ▶️ Play song when index changes
   useEffect(() => {
-    if (currentSong && audioRef.current) {
-      audioRef.current.src = `http://localhost:5000${currentSong.fileUrl}`;
-      audioRef.current.play();
-    }
-  }, [currentIndex, currentSong]);
+  const audio = audioRef.current;
+  if (!audio || !currentSong) return;
 
+  audio.src = `http://localhost:5000${currentSong.fileUrl}`;
+  audio.load();
+
+  audio.play()
+    .then(() => setIsPlaying(true))
+    .catch(() => setIsPlaying(false));
+}, [currentSong]);
+ useEffect(() => {
+  const audio = audioRef.current;
+  if (!audio) return;
+
+  const updateProgress = () => {
+    setProgress(audio.currentTime);
+  };
+
+  const updateDuration = () => {
+    setDuration(audio.duration || 0);
+  };
+
+  audio.addEventListener("timeupdate", updateProgress);
+  audio.addEventListener("loadedmetadata", updateDuration);
+
+  return () => {
+    audio.removeEventListener("timeupdate", updateProgress);
+    audio.removeEventListener("loadedmetadata", updateDuration);
+  };
+}, []);
   const playSong = (index) => {
     setCurrentIndex(index);
   };
 
-  const playNext = () => {
-    if (currentIndex === null) return;
-    setCurrentIndex((currentIndex + 1) % songs.length);
-  };
+const playNext = () => {
+  if (currentIndex === null) return;
+  setCurrentIndex((currentIndex + 1) % songs.length);
+};
 
-  const playPrev = () => {
-    if (currentIndex === null) return;
-    setCurrentIndex(
-      currentIndex === 0 ? songs.length - 1 : currentIndex - 1
-    );
-  };
+const playPrev = () => {
+  if (currentIndex === null) return;
+  setCurrentIndex(
+    currentIndex === 0 ? songs.length - 1 : currentIndex - 1
+  );
+};
+const seek = (e) => {
+  const audio = audioRef.current;
+  if (!audio || !duration) return;
 
+  const percent = e.target.value;
+  audio.currentTime = (percent / 100) * duration;
+};
+const togglePlay = () => {
+  const audio = audioRef.current;
+  if (!audio) return;
+
+  if (isPlaying) {
+    audio.pause();
+    setIsPlaying(false);
+  } else {
+    audio.play().then(() => {
+      setIsPlaying(true);
+    }).catch(() => {
+      setIsPlaying(false);
+    });
+  }
+};
   return (
-    <div style={{ padding: "20px", maxWidth: "500px", margin: "auto" }}>
+    <div className="home-container">
       <h1 style={{ textAlign: "center" }}>🎶 Music Player</h1>
 
       {songs.length === 0 && <p>No songs found</p>}
+      <div className="songs-grid">
+        {songs.map((song, index) => (
+          <div
+            key={song._id}
+            className={`song-card ${currentIndex === index ? "active" : ""}`}
+            onClick={() => playSong(index)}
+          >
+            <img src="/music-cover.png" alt="cover" className="song-cover" />
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {songs.map((song, index) => {
-          const isPlaying = index === currentIndex;
-
-          return (
-            <li
-              key={song._id}
-              onClick={() => playSong(index)}
-              style={{
-                cursor: "pointer",
-                padding: "10px",
-                marginBottom: "8px",
-                borderRadius: "6px",
-                border: isPlaying ? "2px solid #4caf50" : "1px solid #ccc",
-                background: isPlaying ? "#eaffea" : "#fff",
-                fontWeight: isPlaying ? "bold" : "normal",
-              }}
-            >
-              {isPlaying ? "▶️ " : "🎵 "}
-              {song.title} – {song.artist}
-            </li>
-          );
-        })}
-      </ul>
-
+            <div className="song-info">
+              <p className="song-title">{song.title}</p>
+              <p className="song-artist">{song.artist}</p>
+            </div>
+          </div>
+        ))}
+      </div>
       {/* PLAYER CONTROLS */}
       {currentSong && (
-        <>
-          <p style={{ textAlign: "center", marginTop: "10px" }}>
-            Now Playing: <strong>{currentSong.title}</strong>
-          </p>
+  <div className="player-box">
+    {/* SONG INFO */}
+    <div className="player-info">
+      <strong>{currentSong.title}</strong>
+      <span>{currentSong.artist}</span>
+    </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <button onClick={playPrev}>⏮ Prev</button>
-            <button onClick={playNext}>Next ⏭</button>
-          </div>
+    {/* PROGRESS BAR */}
+    <input
+      className="progress-bar"
+      type="range"
+      min="0"
+      max="100"
+      value={duration ? (progress / duration) * 100 : 0}
+      onChange={seek}
+    />
 
-          <audio
-            ref={audioRef}
-            controls
-            style={{ width: "100%", marginTop: "10px" }}
-          />
-        </>
-      )}
+    {/* CONTROLS */}
+    <div className="controls">
+      <button onClick={playPrev}>⏮</button>
+      <button onClick={togglePlay}>
+        {isPlaying ? "⏸" : "▶"}
+      </button>
+      <button onClick={playNext}>⏭</button>
+    </div>
+  </div>
+)}
+      <audio ref={audioRef} />
     </div>
   );
 }

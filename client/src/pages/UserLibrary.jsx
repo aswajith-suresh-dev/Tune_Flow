@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import "../css/UserLibrary.css";
 
 function UserLibrary({ songs }) {
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [currentSong, setCurrentSong] = useState(null);
+  const [isAddMode, setIsAddMode] = useState(false);
 
   const audioRef = useRef(null);
   const token = localStorage.getItem("token");
@@ -12,12 +14,10 @@ function UserLibrary({ songs }) {
   // 🔁 Fetch playlists
   const fetchPlaylists = async () => {
     const res = await fetch("/api/playlists/mine", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-    setPlaylists(data);
+    setPlaylists(Array.isArray(data) ? data : []);
   };
 
   useEffect(() => {
@@ -43,10 +43,7 @@ function UserLibrary({ songs }) {
 
   // ➕ Add song to playlist
   const addSongToPlaylist = async (songId) => {
-    if (!selectedPlaylist) {
-      alert("Select a playlist first");
-      return;
-    }
+    if (!selectedPlaylist) return;
 
     const res = await fetch("/api/playlists/add-song", {
       method: "POST",
@@ -62,7 +59,6 @@ function UserLibrary({ songs }) {
 
     const updatedPlaylist = await res.json();
 
-    // 🔥 update UI instantly
     setPlaylists((prev) =>
       prev.map((pl) =>
         pl._id === updatedPlaylist._id ? updatedPlaylist : pl
@@ -71,19 +67,19 @@ function UserLibrary({ songs }) {
     setSelectedPlaylist(updatedPlaylist);
   };
 
-  // ▶️ PLAY SONG (THIS WAS MISSING)
+  // ▶️ Play song
   const playSong = (song) => {
     if (!audioRef.current) return;
 
     audioRef.current.src = `http://localhost:5000${song.fileUrl}`;
-    audioRef.current.load(); // VERY IMPORTANT
+    audioRef.current.load();
     audioRef.current.play();
 
     setCurrentSong(song);
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
+    <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
       <h1>🎧 My Library</h1>
 
       {/* CREATE PLAYLIST */}
@@ -96,15 +92,19 @@ function UserLibrary({ songs }) {
         <button onClick={createPlaylist}>Create</button>
       </div>
 
+      {/* MAIN LAYOUT */}
       <div style={{ display: "flex", gap: "30px" }}>
-        {/* LEFT: PLAYLISTS */}
+        {/* LEFT PANEL */}
         <div style={{ width: "30%" }}>
           <h3>🎵 Playlists</h3>
 
           {playlists.map((pl) => (
             <div
               key={pl._id}
-              onClick={() => setSelectedPlaylist(pl)}
+              onClick={() => {
+                setSelectedPlaylist(pl);
+                setIsAddMode(false);
+              }}
               style={{
                 padding: "8px",
                 cursor: "pointer",
@@ -120,59 +120,105 @@ function UserLibrary({ songs }) {
           ))}
         </div>
 
-        {/* RIGHT: ALL SONGS */}
-        <div style={{ width: "70%" }}>
-          <h3>➕ All Songs</h3>
+        {/* RIGHT PANEL */}
+        <div
+          style={{
+            width: "70%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          {!selectedPlaylist && (
+            <p style={{ color: "#777" }}>
+              Select a playlist to view or add songs
+            </p>
+          )}
 
-          {songs.map((song) => {
-            const alreadyAdded =
-              selectedPlaylist?.songs?.some(
-                (s) => String(s._id) === String(song._id)
-              );
-
-            return (
+          {selectedPlaylist && (
+            <>
+              {/* HEADER */}
               <div
-                key={song._id}
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  marginBottom: "8px",
+                  alignItems: "center",
                 }}
               >
-                <span>
-                  🎵 {song.title} – {song.artist}
-                </span>
+                <h3>
+                  {isAddMode
+                    ? "➕ Add Songs"
+                    : `📂 ${selectedPlaylist.name}`}
+                </h3>
 
-                <button
-                  disabled={alreadyAdded}
-                  onClick={() => addSongToPlaylist(song._id)}
-                >
-                  {alreadyAdded ? "Added" : "Add"}
+                <button onClick={() => setIsAddMode(!isAddMode)}>
+                  {isAddMode ? "⬅ Back" : "➕ Add Songs"}
                 </button>
               </div>
-            );
-          })}
+
+              {/* CONTENT */}
+              {!isAddMode && (
+                <>
+                  {selectedPlaylist.songs.length === 0 && (
+                    <p>No songs yet</p>
+                  )}
+
+                  <div className="playlist-grid">
+                    {selectedPlaylist.songs.map((song) => (
+                      <div
+                        key={song._id}
+                        className="playlist-song-card"
+                        onClick={() => playSong(song)}
+                      >
+                        <img
+                          src="/music-cover.png"
+                          alt="cover"
+                          className="playlist-song-cover"
+                        />
+                        <div>
+                          <p>{song.title}</p>
+                          <p>{song.artist}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {isAddMode &&
+                songs.map((song) => {
+                  const alreadyAdded =
+                    selectedPlaylist.songs.some(
+                      (s) => String(s._id) === String(song._id)
+                    );
+
+                  return (
+                    <div
+                      key={song._id}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "10px",
+                        borderBottom: "1px solid #ddd",
+                      }}
+                    >
+                      <span>
+                        🎵 {song.title} – {song.artist}
+                      </span>
+
+                      <button
+                        disabled={alreadyAdded}
+                        onClick={() => addSongToPlaylist(song._id)}
+                      >
+                        {alreadyAdded ? "Added" : "Add"}
+                      </button>
+                    </div>
+                  );
+                })}
+            </>
+          )}
         </div>
       </div>
-
-      {/* PLAYLIST SONGS */}
-      {selectedPlaylist && (
-        <div style={{ marginTop: "30px" }}>
-          <h3>📂 {selectedPlaylist.name}</h3>
-
-          {selectedPlaylist.songs.length === 0 && <p>No songs yet</p>}
-
-          {selectedPlaylist.songs.map((song) => (
-            <div
-              key={song._id}
-              style={{ cursor: "pointer", marginBottom: "6px" }}
-              onClick={() => playSong(song)}
-            >
-              ▶️ {song.title} – {song.artist}
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* AUDIO PLAYER */}
       <div style={{ marginTop: "20px" }}>

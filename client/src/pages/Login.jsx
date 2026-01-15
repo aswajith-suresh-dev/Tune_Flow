@@ -1,78 +1,66 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authApi";
+import "../css/login.css";
 
 function Login({ setRole }) {
-    
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
 
-  try {
-    console.log("Login button clicked 🔘");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
     const data = await loginUser(email, password);
-    console.log("Login response:", data);
 
     if (!data.token) {
-  setError("Invalid login response");
-  return;
-}
+      setError("Invalid email or password");
+      return;
+    }
 
-// ✅ STORE AUTH DATA
-localStorage.setItem("token", data.token);
-localStorage.setItem("role", data.user.role);
-localStorage.setItem("userId", data.user.id);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.user.role);
+    setRole(data.user.role);
 
-// ✅ UPDATE REACT STATE (THIS WAS MISSING)
-setRole(data.user.role);
+    navigate(data.user.role === "admin" ? "/admin" : "/home");
+  };
 
-// ✅ REDIRECT
-if (data.user.role === "admin") {
-  navigate("/admin");
-} else {
-  navigate("/");
-}
-
-  } catch (err) {
-    console.error("Login failed ❌", err);
-    setError("Login failed");
-  }
-};
   return (
-    <div style={{ maxWidth: "400px", margin: "40px auto" }}>
-      <h2>Login</h2>
+    <div className="login-page">
+      <div className="login-card">
+        <h2>Welcome back</h2>
+        <p className="subtitle">Login to continue</p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          {error && <p className="error">{error}</p>}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+          <button type="submit">Login</button>
+        </form>
+
+        <div className="login-footer">
+          <span>Forgot password?</span>
+        </div>
+      </div>
     </div>
   );
 }
-
 
 export default Login;

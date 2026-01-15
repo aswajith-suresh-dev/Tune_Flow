@@ -1,90 +1,75 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
 import AdminUpload from "./pages/AdminUpload";
+import UserLibrary from "./pages/UserLibrary";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserRoute from "./components/UserRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import Login from "./pages/Login";
-import UserLibrary from "./pages/UserLibrary";
 
 function App() {
   const [songs, setSongs] = useState([]);
   const [role, setRole] = useState(localStorage.getItem("role"));
 
-  // 🔁 Load auth state ONCE
   useEffect(() => {
-    const savedRole = localStorage.getItem("role");
-    setRole(savedRole);
-  }, []);
-
-  const fetchSongs = () => {
     fetch("/api/songs")
       .then((res) => res.json())
-      .then((data) => setSongs(data))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    fetchSongs();
+      .then((data) => setSongs(data));
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
     setRole(null);
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   return (
     <BrowserRouter>
-      {/* 🔹 NAVBAR */}
-      <nav style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
-        <Link to="/">Home</Link>
+      <Navbar role={role} onLogout={handleLogout} />
 
-        {!role && (
-          <>
-            {" | "}
-            <Link to="/login">Login</Link>
-          </>
-        )}
-
-        {role === "admin" && (
-          <>
-            {" | "}
-            <Link to="/admin">Admin</Link>
-          </>
-        )}
-{role === "user" && <> | <Link to="/library">My Library</Link></>}
-        {role && (
-          <>
-            {" | "}
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        )}
-        
-      </nav>
-
-      {/* 🔹 ROUTES */}
       <Routes>
-        <Route path="/" element={<Home songs={songs} />} />
+        {/* 🌍 Public Landing */}
+        <Route path="/" element={<Landing />} />
 
+        {/* 🎵 User Home */}
+        <Route
+          path="/home"
+          element={
+            <UserRoute>
+              <Home songs={songs} />
+            </UserRoute>
+          }
+        />
+
+        {/* 📚 User Library */}
+        <Route
+          path="/library"
+          element={
+            <UserRoute>
+              <UserLibrary songs={songs} />
+            </UserRoute>
+          }
+        />
+
+        {/* 🛠 Admin */}
         <Route
           path="/admin"
           element={
             <ProtectedRoute>
-              <AdminUpload
-                onUploadSuccess={fetchSongs}
-                songs={songs}
-              />
+              <AdminUpload songs={songs} />
             </ProtectedRoute>
           }
         />
 
-        <Route path="/login" element={<Login setRole={setRole}/>} />
+        {/* 🔐 Auth */}
+        <Route path="/login" element={<Login setRole={setRole} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/library" element={<UserLibrary songs={songs} />} />
       </Routes>
     </BrowserRouter>
   );

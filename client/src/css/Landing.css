@@ -1,0 +1,116 @@
+.landing {
+  min-height: 100vh;
+}
+
+/* HERO */
+.hero {
+    margin:0;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #0f172a;
+  /* background: linear-gradient(135deg, #111, #222); */
+  color: white;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color:#f8fafc;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color:#94a3b8;
+  opacity: 0.8;
+}
+
+.hero-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.primary-btn {
+  background: #6366f1;
+  color:#faf8fc;
+}
+
+.secondary-btn {
+  background-color:transparent;
+  border: 1px solid white;
+  color: #f8fafc;
+}
+
+/* FEATURES */
+.features {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* gap: 40px; */
+  padding:20px;
+  color:#94a3b8;
+}
+
+.feature {
+  max-width: 300px;
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.6;
+}
+.features {
+  width: 100%;
+  padding: 80px 60px;
+  background-color: #f9f9f9;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px 400px;
+  align-items: center;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feature.text h2 {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.feature.text p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.feature.image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 16px;
+}
+.features-wrapper {
+  max-width: 1200px;   /* controls how wide the section is */
+  margin: 0 auto;      /* 👈 centers it horizontally */
+  padding: 0 20px;     /* small mobile safety padding */
+}
