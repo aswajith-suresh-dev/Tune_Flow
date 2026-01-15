@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import Navbar from "./components/Navbar";
+import Signup from "./pages/signup";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -31,7 +31,6 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar role={role} onLogout={handleLogout} />
-
       <Routes>
         {/* 🌍 Public Landing */}
         <Route path="/" element={<Landing />} />
@@ -65,7 +64,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+<Route path="/signup" element={<Signup />} />
         {/* 🔐 Auth */}
         <Route path="/login" element={<Login setRole={setRole} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

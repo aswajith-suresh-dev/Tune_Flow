@@ -5,13 +5,18 @@ function UserLibrary({ songs }) {
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState("");
+
   const [currentSong, setCurrentSong] = useState(null);
   const [isAddMode, setIsAddMode] = useState(false);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+const [currentIndex, setCurrentIndex] = useState(null);
   const audioRef = useRef(null);
   const token = localStorage.getItem("token");
 
-  // 🔁 Fetch playlists
+  /* ---------------- FETCH PLAYLISTS ---------------- */
   const fetchPlaylists = async () => {
     const res = await fetch("/api/playlists/mine", {
       headers: { Authorization: `Bearer ${token}` },
@@ -24,7 +29,38 @@ function UserLibrary({ songs }) {
     fetchPlaylists();
   }, []);
 
-  // ➕ Create playlist
+  /* ---------------- AUDIO: LOAD & PLAY ---------------- */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentSong) return;
+
+    audio.src = `http://localhost:5000${currentSong.fileUrl}`;
+    audio.load();
+
+    audio
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(() => setIsPlaying(false));
+  }, [currentSong]);
+
+  /* ---------------- AUDIO EVENTS ---------------- */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => setProgress(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration || 0);
+
+    audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("loadedmetadata", updateDuration);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateProgress);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+    };
+  }, []);
+
+  /* ---------------- PLAYLIST ACTIONS ---------------- */
   const createPlaylist = async () => {
     if (!newPlaylistName.trim()) return;
 
@@ -41,7 +77,6 @@ function UserLibrary({ songs }) {
     fetchPlaylists();
   };
 
-  // ➕ Add song to playlist
   const addSongToPlaylist = async (songId) => {
     if (!selectedPlaylist) return;
 
@@ -67,68 +102,95 @@ function UserLibrary({ songs }) {
     setSelectedPlaylist(updatedPlaylist);
   };
 
-  // ▶️ Play song
+  /* ---------------- AUDIO CONTROLS ---------------- */
   const playSong = (song) => {
-    if (!audioRef.current) return;
+  const index = selectedPlaylist.songs.findIndex(
+    (s) => s._id === song._id
+  );
 
-    audioRef.current.src = `http://localhost:5000${song.fileUrl}`;
-    audioRef.current.load();
-    audioRef.current.play();
+  setCurrentIndex(index);
+  setCurrentSong(song);
+};
 
-    setCurrentSong(song);
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio || !currentSong) return;
+
+    if (audio.paused) {
+      audio.play().then(() => setIsPlaying(true));
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  };
+const playNext = () => {
+  if (!selectedPlaylist || currentIndex === null) return;
+
+  const nextIndex =
+    (currentIndex + 1) % selectedPlaylist.songs.length;
+
+  setCurrentIndex(nextIndex);
+  setCurrentSong(selectedPlaylist.songs[nextIndex]);
+};
+
+const playPrev = () => {
+  if (!selectedPlaylist || currentIndex === null) return;
+
+  const prevIndex =
+    currentIndex === 0
+      ? selectedPlaylist.songs.length - 1
+      : currentIndex - 1;
+
+  setCurrentIndex(prevIndex);
+  setCurrentSong(selectedPlaylist.songs[prevIndex]);
+};
+  const seek = (e) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+
+    const percent = e.target.value;
+    audio.currentTime = (percent / 100) * duration;
   };
 
+  /* ---------------- UI ---------------- */
   return (
-    <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
-      <h1>🎧 My Library</h1>
+    <div style={{ padding: "20px" }}>
+      <h1 className="library-title">🎧 My Library</h1>
 
-      {/* CREATE PLAYLIST */}
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          placeholder="New playlist name"
-          value={newPlaylistName}
-          onChange={(e) => setNewPlaylistName(e.target.value)}
-        />
-        <button onClick={createPlaylist}>Create</button>
-      </div>
-
-      {/* MAIN LAYOUT */}
       <div style={{ display: "flex", gap: "30px" }}>
         {/* LEFT PANEL */}
-        <div style={{ width: "30%" }}>
+        <div className="left-panel">
           <h3>🎵 Playlists</h3>
 
-          {playlists.map((pl) => (
-            <div
-              key={pl._id}
-              onClick={() => {
-                setSelectedPlaylist(pl);
-                setIsAddMode(false);
-              }}
-              style={{
-                padding: "8px",
-                cursor: "pointer",
-                background:
-                  selectedPlaylist?._id === pl._id
-                    ? "#e6ffe6"
-                    : "#f5f5f5",
-                marginBottom: "6px",
-              }}
-            >
-              {pl.name}
-            </div>
-          ))}
+          <div className="playlist-create">
+            <input
+              placeholder="New playlist..."
+              value={newPlaylistName}
+              onChange={(e) => setNewPlaylistName(e.target.value)}
+            />
+            <button onClick={createPlaylist}>Create</button>
+          </div>
+
+          <div className="playlist-list">
+            {playlists.map((pl) => (
+              <div
+                key={pl._id}
+                onClick={() => {
+                  setSelectedPlaylist(pl);
+                  setIsAddMode(false);
+                }}
+                className={`playlist-item ${
+                  selectedPlaylist?._id === pl._id ? "active" : ""
+                }`}
+              >
+                {pl.name}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* RIGHT PANEL */}
-        <div
-          style={{
-            width: "70%",
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-          }}
-        >
+        <div style={{ width: "70%" }}>
           {!selectedPlaylist && (
             <p style={{ color: "#777" }}>
               Select a playlist to view or add songs
@@ -137,7 +199,6 @@ function UserLibrary({ songs }) {
 
           {selectedPlaylist && (
             <>
-              {/* HEADER */}
               <div
                 style={{
                   display: "flex",
@@ -156,33 +217,32 @@ function UserLibrary({ songs }) {
                 </button>
               </div>
 
-              {/* CONTENT */}
               {!isAddMode && (
-                <>
+                <div className="playlist-grid">
                   {selectedPlaylist.songs.length === 0 && (
                     <p>No songs yet</p>
                   )}
 
-                  <div className="playlist-grid">
-                    {selectedPlaylist.songs.map((song) => (
-                      <div
-                        key={song._id}
-                        className="playlist-song-card"
-                        onClick={() => playSong(song)}
-                      >
-                        <img
-                          src="/music-cover.png"
-                          alt="cover"
-                          className="playlist-song-cover"
-                        />
-                        <div>
-                          <p>{song.title}</p>
-                          <p>{song.artist}</p>
-                        </div>
+                  {selectedPlaylist.songs.map((song) => (
+                    <div
+  key={song._id}
+  className={`playlist-song-card ${
+    currentSong?._id === song._id ? "active" : ""
+  }`}
+  onClick={() => playSong(song)}
+>
+                      <img
+                        src="/music-cover.png"
+                        alt="cover"
+                        className="playlist-song-cover"
+                      />
+                      <div>
+                        <p>{song.title}</p>
+                        <p>{song.artist}</p>
                       </div>
-                    ))}
-                  </div>
-                </>
+                    </div>
+                  ))}
+                </div>
               )}
 
               {isAddMode &&
@@ -220,15 +280,36 @@ function UserLibrary({ songs }) {
         </div>
       </div>
 
-      {/* AUDIO PLAYER */}
-      <div style={{ marginTop: "20px" }}>
-        {currentSong && (
-          <p>
-            Now Playing: <strong>{currentSong.title}</strong>
-          </p>
-        )}
-        <audio ref={audioRef} controls style={{ width: "100%" }} />
-      </div>
+      {/* PLAYER */}
+      {currentSong && (
+        <div className="player-box">
+          <div className="player-info">
+            <strong>{currentSong.title}</strong>
+            <span>{currentSong.artist}</span>
+          </div>
+
+          <input
+            className="progress-bar"
+            type="range"
+            min="0"
+            max="100"
+            value={duration ? (progress / duration) * 100 : 0}
+            onChange={seek}
+          />
+
+          <div className="controls">
+  <button onClick={playPrev}>⏮</button>
+
+  <button onClick={togglePlay}>
+    {isPlaying ? "⏸" : "▶"}
+  </button>
+
+  <button onClick={playNext}>⏭</button>
+</div>
+        </div>
+      )}
+
+      <audio ref={audioRef} />
     </div>
   );
 }

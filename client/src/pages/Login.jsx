@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authApi";
-import "../css/login.css";
+import "../css/auth.css";
 
 function Login({ setRole }) {
   const navigate = useNavigate();
@@ -28,39 +28,40 @@ function Login({ setRole }) {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h2>Welcome back</h2>
-        <p className="subtitle">Login to continue</p>
+  <div className="auth-container">
+    <div className="auth-card">
+      <h2>Login</h2>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-          {error && <p className="error">{error}</p>}
+        <button type="submit">Login</button>
+      </form>
 
-          <button type="submit">Login</button>
-        </form>
+      {error && <p className="auth-message">{error}</p>}
 
-        <div className="login-footer">
-          <span>Forgot password?</span>
-        </div>
+      <div className="auth-links">
+        <a href="/forgot-password">Forgot password?</a>
+        <br />
+        <a href="/signup">Create an account</a>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default Login;
