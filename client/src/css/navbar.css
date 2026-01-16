@@ -9,6 +9,7 @@
 
   display: flex;
   align-items: center;
+  
 border-bottom:1px solid #94A388 ;
   background-color: #34176A;
   
@@ -39,6 +40,7 @@ border-bottom:1px solid #94A388 ;
 
 .nav-center a:hover {
   color: #f8fafc;
+    cursor: pointer;
 }
 
 /* RIGHT */

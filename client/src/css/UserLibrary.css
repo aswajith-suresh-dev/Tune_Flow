@@ -125,9 +125,11 @@
   background: #f5f5f5;
 }
 
+
 .playlist-item.active {
   background: #e0e7ff;
   font-weight: 500;
+  
 }
 .player {
   margin-top: 20px;
