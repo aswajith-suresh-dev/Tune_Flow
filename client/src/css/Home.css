@@ -163,7 +163,7 @@
   border: 2px solid transparent; /* IMPORTANT */
 }
 .song-card:hover {
-  border: 2px solid #111827; /* Spotify green */
+  border: 2px solid #6366f1; /* Spotify green */
   background: rgba(29, 185, 84, 0.05);
 }
 .song-card.active {

@@ -160,7 +160,7 @@ const playPrev = () => {
       <div style={{ display: "flex", gap: "30px" }}>
         {/* LEFT PANEL */}
         <div className="left-panel">
-          <h3>🎵 Playlists</h3>
+          <h3 style={{color:"#6366f1"}}>🎵 Playlists</h3>
 
           <div className="playlist-create">
             <input

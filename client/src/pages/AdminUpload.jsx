@@ -7,7 +7,10 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
   const [artist, setArtist] = useState("");
   const [file, setFile] = useState(null);
 
-  // 🔹 SAVE (UPLOAD or UPDATE)
+  // ✅ GET TOKEN ONCE
+  const token = localStorage.getItem("token");
+
+  /* ---------------- SAVE (UPLOAD / UPDATE) ---------------- */
   const handleSave = async () => {
     if (!title || !artist) {
       alert("Please fill all fields");
@@ -17,15 +20,19 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
     try {
       let response;
 
-      // ✏️ EDIT MODE
+      // ✏️ UPDATE SONG
       if (editingSong) {
         response = await fetch(`/api/songs/${editingSong._id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ title, artist }),
         });
       }
-      // ➕ UPLOAD MODE
+
+      // ➕ UPLOAD SONG
       else {
         if (!file) {
           alert("Please select a song file");
@@ -39,57 +46,82 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
 
         response = await fetch("/api/songs", {
           method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           body: formData,
         });
       }
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.message || "Operation failed");
+        throw new Error(data.message || "Operation failed");
       }
 
       alert(editingSong ? "Song updated 🎶" : "Song uploaded 🎵");
 
+      // reset
       setTitle("");
       setArtist("");
       setFile(null);
       setEditingSong(null);
 
-      onUploadSuccess();
+      // ✅ refresh list
+      if (onUploadSuccess) onUploadSuccess();
+
     } catch (error) {
       alert(error.message);
     }
   };
 
-  // 🔹 DELETE
+  /* ---------------- DELETE SONG ---------------- */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this song?")) return;
 
     try {
-      const res = await fetch(`/api/songs/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/songs/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Delete failed");
+      }
+
       alert(data.message);
-      onUploadSuccess();
-    } catch {
-      alert("Delete failed");
+
+      // ✅ refresh list
+      if (onUploadSuccess) onUploadSuccess();
+
+    } catch (error) {
+      alert(error.message);
     }
   };
 
-  // 🔹 EDIT
+  /* ---------------- EDIT MODE ---------------- */
   const handleEdit = (song) => {
     setEditingSong(song);
     setTitle(song.title);
     setArtist(song.artist);
   };
 
+  /* ---------------- UI ---------------- */
   return (
     <div className="admin-page">
       <h1 className="admin-title">🎛 Admin Dashboard</h1>
 
       <div className="admin-layout">
+
         {/* LEFT: FORM */}
         <div className="admin-form">
-          <h2>{editingSong ? "Edit Song ✏️" : "Upload Song 🎵"}</h2>
+          <h2>
+            {editingSong ? "Edit Song ✏️" : "Upload Song 🎵"}
+          </h2>
 
           <input
             type="text"
@@ -136,6 +168,7 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
                   >
                     Edit
                   </button>
+
                   <button
                     className="admin-delete"
                     onClick={() => handleDelete(song._id)}
@@ -147,6 +180,7 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
             ))}
           </ul>
         </div>
+
       </div>
     </div>
   );

@@ -15,13 +15,24 @@ import ResetPassword from "./pages/ResetPassword";
 function App() {
   const [songs, setSongs] = useState([]);
   const [role, setRole] = useState(localStorage.getItem("role"));
+const fetchSongs = async () => {
+  try {
+    const res = await fetch("/api/songs");
+    const data = await res.json();
+    setSongs(data);
+  } catch (err) {
+    console.error("Failed to fetch songs", err);
+  }
+};
 
   useEffect(() => {
     fetch("/api/songs")
       .then((res) => res.json())
       .then((data) => setSongs(data));
   }, []);
-
+useEffect(() => {
+  fetchSongs();
+}, []);
   const handleLogout = () => {
     localStorage.clear();
     setRole(null);
@@ -63,13 +74,16 @@ function App() {
 
         {/* 🛠 Admin */}
         <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminUpload songs={songs} />
-            </ProtectedRoute>
-          }
-        />
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <AdminUpload
+        songs={songs}
+        onUploadSuccess={fetchSongs}
+      />
+    </ProtectedRoute>
+  }
+/>
 <Route path="/signup" element={<Signup />} />
         {/* 🔐 Auth */}
         <Route path="/login" element={<Login setRole={setRole} />} />

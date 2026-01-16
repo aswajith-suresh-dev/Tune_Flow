@@ -11,7 +11,7 @@
   align-items: center;
   
 border-bottom:1px solid #94A388 ;
-  background-color: #34176A;
+  background-color: #0f172a;
   
   z-index: 1000;
 }
@@ -21,7 +21,7 @@ border-bottom:1px solid #94A388 ;
   margin-left: 40px;          /* ✅ exact spacing */
   font-weight: 600;
   font-size: 30px;
-  color: #f8fafc;
+  color: #6366f1;
 }
 
 /* CENTER */
@@ -56,4 +56,29 @@ border-bottom:1px solid #94A388 ;
   cursor: pointer;
   font-size: 30px;
   color: #f8fafc;
+}
+/* LEFT */
+.nav-left {
+  width: 200px;           /* ✅ lock width */
+  margin-left: 40px;
+  font-weight: 600;
+  font-size: 30px;
+  color: #6366f1;
+}
+
+/* CENTER */
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* RIGHT */
+.nav-right {
+  width: 200px;           /* ✅ SAME as left */
+  margin-right: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

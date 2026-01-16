@@ -119,6 +119,7 @@
 }
 
 .playlist-item {
+  margin-top:3px;
   padding: 8px;
   border-radius: 6px;
   cursor: pointer;
@@ -129,7 +130,8 @@
 .playlist-item.active {
   background: #e0e7ff;
   font-weight: 500;
-  
+    transform: scaleY(1.1);
+    color:#6366f1;
 }
 .player {
   margin-top: 20px;
