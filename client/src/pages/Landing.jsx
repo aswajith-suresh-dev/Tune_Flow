@@ -6,44 +6,44 @@ function Landing() {
       {/* HERO SECTION */}
       <section className="hero">
         <h1>Feel the Music</h1>
-        <p>
-          All your music one place.
-        </p>
+        <p>All your music one place.</p>
         <div className="hero-actions">
-          <a href="/login" className="primary-btn">Get Started</a>
-          {/* <a href="/home" className="secondary-btn">Explore Music</a> */}
+          <a href="/login" className="primary-btn">
+            Get Started
+          </a>
         </div>
       </section>
-<section className="features">
-    <div className="features-wrapper">
-  <div className="features-grid">
-    
-    <div className="feature text">
-      <h2>Create Playlists</h2>
-      <p>Organize your favorite songs into playlists and enjoy music your way.
-Build playlists for focus, fun, or late-night sessions.
-Your music, structured just the way you like it.
-      </p>
-    </div>
+      <section className="features">
+        <div className="features-wrapper">
+          <div className="features-grid">
+            <div className="feature text">
+              <h2>Create Playlists</h2>
+              <p>
+                Organize your favorite songs into playlists and enjoy music your
+                way. Build playlists for focus, fun, or late-night sessions.
+                Your music, structured just the way you like it.
+              </p>
+            </div>
 
-    <div className="feature image">
-      <img src="/feature-playlist.png" alt="Playlist feature" />
-    </div>
+            <div className="feature image">
+              <img src="/undraw_audio-player_7uwh.svg" alt="Playlist feature" />
+            </div>
 
-    <div className="feature image">
-      <img src="/feature-player.png" alt="Music player" />
-    </div>
+            <div className="feature image">
+              <img src="/undraw_online-media_opxh.svg" alt="Music player" />
+            </div>
 
-    <div className="feature text">
-      <h2>Powerful Music Player</h2>
-      <p>Play, pause, skip, and take full control of your music with a clean, modern player.
-Enjoy a smooth listening experience designed to keep the focus on your sound, not distractions.
-      </p>
-    </div>
-
-  </div>
-  </div>
-</section>
+            <div className="feature text">
+              <h2>Powerful Music Player</h2>
+              <p>
+                Play, pause, skip, and take full control of your music with a
+                clean, modern player. Enjoy a smooth listening experience
+                designed to keep the focus on your sound, not distractions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* FOOTER */}
       <footer className="footer">
@@ -52,6 +52,5 @@ Enjoy a smooth listening experience designed to keep the focus on your sound, no
     </div>
   );
 }
-
 
 export default Landing;
