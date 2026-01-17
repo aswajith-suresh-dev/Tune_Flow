@@ -62,3 +62,27 @@
 .nav-right button:hover {
   color: #3b82f6;
 }
+@media (max-width: 768px) {
+  .navbar {
+    height: 90px;          /* 🔒 DO NOT change */
+    padding: 0 16px;       /* horizontal only */
+    flex-wrap: nowrap;     /* 🔒 NO wrapping */
+  }
+
+  .nav-left {
+    margin-left: 16px;
+    font-size: 22px;
+  }
+
+  .nav-center {
+    gap: 16px;
+  }
+
+  .nav-center a {
+    font-size: 16px;
+  }
+
+  .nav-right {
+    margin-right: 16px;
+  }
+}
