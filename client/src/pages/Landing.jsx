@@ -26,11 +26,11 @@ function Landing() {
             </div>
 
             <div className="feature image">
-              <img src="/undraw_audio-player_7uwh.svg" alt="Playlist feature" />
+              <img src="/undraw_online-media_opxh.svg" alt="Playlist feature" />
             </div>
 
             <div className="feature image">
-              <img src="/undraw_online-media_opxh.svg" alt="Music player" />
+              <img src="/undraw_audio-player_7uwh.svg" alt="Music player" />
             </div>
 
             <div className="feature text">
