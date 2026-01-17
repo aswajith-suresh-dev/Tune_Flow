@@ -11,7 +11,7 @@
   margin-top: 100px;
   padding: 20px;
   width: 100%;
-  padding-bottom: 95px; /* space for player */
+  padding-bottom: 95px; 
 }
 
 
@@ -122,14 +122,14 @@
   border-radius: 14px;
   cursor: pointer;
 
-  box-sizing: border-box;        /* 🔑 THIS FIXES IT */
-  border: 2px solid transparent; /* reserve border space */
+  box-sizing: border-box;        
+  border: 2px solid transparent; 
 
   transition: border 0.2s ease, background 0.2s ease;
 }
 .song-cover {
   width: 100%;
-  flex: 1;                 /* 👈 image takes remaining space */
+  flex: 1;               
   border-radius: 10px;
   object-fit: cover;
 }
@@ -158,10 +158,10 @@
   padding: 12px;
   cursor: pointer;
   transition: border 0.2s ease, background 0.2s ease;
-  border: 2px solid transparent; /* IMPORTANT */
+  border: 2px solid transparent; 
 }
 .song-card:hover {
-  border: 2px solid #6366f1; /* Spotify green */
+  border: 2px solid #6366f1;
   background: rgba(29, 185, 84, 0.05);
 }
 .song-card.active {
@@ -187,8 +187,8 @@
 }
 /* PLAYER CONTAINER */
 .player-box {
-  width: 620px;          /* ⬅ was 800px */
-  padding: 8px 12px;    /* ⬅ reduced height */
+  width: 620px;         
+  padding: 8px 12px;    
   border-radius: 8px;
 
   position: fixed;
@@ -199,11 +199,8 @@
 
   background: #111;
   color: #fff;
-  /* box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.35); */
 }
-/* .player-box {
-   backdrop-filter: blur(6px); 
-}  */
+
 
 /* SONG NAME */
 .player-info {

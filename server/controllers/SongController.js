@@ -14,9 +14,7 @@ export const deleteSong = async (req, res) => {
     // Build absolute path safely
     const filePath = path.join(
       process.cwd(),
-      song.fileUrl.startsWith("/")
-        ? song.fileUrl.slice(1)
-        : song.fileUrl
+      song.fileUrl.startsWith("/") ? song.fileUrl.slice(1) : song.fileUrl,
     );
 
     // Delete file if exists
@@ -65,8 +63,6 @@ export const updateSong = async (req, res) => {
     });
   }
 };
-
-
 
 // @desc    Get all songs
 // @route   GET /api/songs

@@ -11,7 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserRoute from "./components/UserRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import "./App.css"
+import "./App.css";
 function App() {
   const [songs, setSongs] = useState([]);
   const [role, setRole] = useState(localStorage.getItem("role"));

@@ -23,9 +23,7 @@ function ForgotPassword() {
     <div className="auth-container">
       <div className="auth-box">
         <h2>Forgot Password</h2>
-        <p className="auth-subtext">
-          Enter your email to reset your password
-        </p>
+        <p className="auth-subtext">Enter your email to reset your password</p>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <input
@@ -51,9 +49,7 @@ function ForgotPassword() {
             <button
               className="auth-button secondary"
               type="button"
-              onClick={() =>
-                navigate("/reset-password", { state: { token } })
-              }
+              onClick={() => navigate("/reset-password", { state: { token } })}
             >
               Reset Password
             </button>

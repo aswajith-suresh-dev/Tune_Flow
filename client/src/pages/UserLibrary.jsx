@@ -12,7 +12,7 @@ function UserLibrary({ songs }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-const [currentIndex, setCurrentIndex] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(null);
   const audioRef = useRef(null);
   const token = localStorage.getItem("token");
 
@@ -95,22 +95,18 @@ const [currentIndex, setCurrentIndex] = useState(null);
     const updatedPlaylist = await res.json();
 
     setPlaylists((prev) =>
-      prev.map((pl) =>
-        pl._id === updatedPlaylist._id ? updatedPlaylist : pl
-      )
+      prev.map((pl) => (pl._id === updatedPlaylist._id ? updatedPlaylist : pl)),
     );
     setSelectedPlaylist(updatedPlaylist);
   };
 
   /* ---------------- AUDIO CONTROLS ---------------- */
   const playSong = (song) => {
-  const index = selectedPlaylist.songs.findIndex(
-    (s) => s._id === song._id
-  );
+    const index = selectedPlaylist.songs.findIndex((s) => s._id === song._id);
 
-  setCurrentIndex(index);
-  setCurrentSong(song);
-};
+    setCurrentIndex(index);
+    setCurrentSong(song);
+  };
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -123,27 +119,24 @@ const [currentIndex, setCurrentIndex] = useState(null);
       setIsPlaying(false);
     }
   };
-const playNext = () => {
-  if (!selectedPlaylist || currentIndex === null) return;
+  const playNext = () => {
+    if (!selectedPlaylist || currentIndex === null) return;
 
-  const nextIndex =
-    (currentIndex + 1) % selectedPlaylist.songs.length;
+    const nextIndex = (currentIndex + 1) % selectedPlaylist.songs.length;
 
-  setCurrentIndex(nextIndex);
-  setCurrentSong(selectedPlaylist.songs[nextIndex]);
-};
+    setCurrentIndex(nextIndex);
+    setCurrentSong(selectedPlaylist.songs[nextIndex]);
+  };
 
-const playPrev = () => {
-  if (!selectedPlaylist || currentIndex === null) return;
+  const playPrev = () => {
+    if (!selectedPlaylist || currentIndex === null) return;
 
-  const prevIndex =
-    currentIndex === 0
-      ? selectedPlaylist.songs.length - 1
-      : currentIndex - 1;
+    const prevIndex =
+      currentIndex === 0 ? selectedPlaylist.songs.length - 1 : currentIndex - 1;
 
-  setCurrentIndex(prevIndex);
-  setCurrentSong(selectedPlaylist.songs[prevIndex]);
-};
+    setCurrentIndex(prevIndex);
+    setCurrentSong(selectedPlaylist.songs[prevIndex]);
+  };
   const seek = (e) => {
     const audio = audioRef.current;
     if (!audio || !duration) return;
@@ -154,13 +147,13 @@ const playPrev = () => {
 
   /* ---------------- UI ---------------- */
   return (
-    <div style={{ padding: "20px", marginTop:"100px"}}>
+    <div style={{ padding: "20px", marginTop: "100px" }}>
       <h1 className="library-title"> My Playlists</h1>
 
       <div style={{ display: "flex", gap: "30px" }}>
         {/* LEFT PANEL */}
         <div className="left-panel">
-          <h3 style={{color:"#6366f1"}}>🎵 Playlists</h3>
+          <h3 style={{ color: "#6366f1" }}>🎵 Playlists</h3>
 
           <div className="playlist-create">
             <input
@@ -207,9 +200,7 @@ const playPrev = () => {
                 }}
               >
                 <h3>
-                  {isAddMode
-                    ? "➕ Add Songs"
-                    : `📂 ${selectedPlaylist.name}`}
+                  {isAddMode ? "➕ Add Songs" : `📂 ${selectedPlaylist.name}`}
                 </h3>
 
                 <button onClick={() => setIsAddMode(!isAddMode)}>
@@ -219,18 +210,16 @@ const playPrev = () => {
 
               {!isAddMode && (
                 <div className="playlist-grid">
-                  {selectedPlaylist.songs.length === 0 && (
-                    <p>No songs yet</p>
-                  )}
+                  {selectedPlaylist.songs.length === 0 && <p>No songs yet</p>}
 
                   {selectedPlaylist.songs.map((song) => (
                     <div
-  key={song._id}
-  className={`playlist-song-card ${
-    currentSong?._id === song._id ? "active" : ""
-  }`}
-  onClick={() => playSong(song)}
->
+                      key={song._id}
+                      className={`playlist-song-card ${
+                        currentSong?._id === song._id ? "active" : ""
+                      }`}
+                      onClick={() => playSong(song)}
+                    >
                       <img
                         src="/music-cover.png"
                         alt="cover"
@@ -247,10 +236,9 @@ const playPrev = () => {
 
               {isAddMode &&
                 songs.map((song) => {
-                  const alreadyAdded =
-                    selectedPlaylist.songs.some(
-                      (s) => String(s._id) === String(song._id)
-                    );
+                  const alreadyAdded = selectedPlaylist.songs.some(
+                    (s) => String(s._id) === String(song._id),
+                  );
 
                   return (
                     <div
@@ -298,14 +286,12 @@ const playPrev = () => {
           />
 
           <div className="controls">
-  <button onClick={playPrev}>⏮</button>
+            <button onClick={playPrev}>⏮</button>
 
-  <button onClick={togglePlay}>
-    {isPlaying ? "⏸" : "▶"}
-  </button>
+            <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</button>
 
-  <button onClick={playNext}>⏭</button>
-</div>
+            <button onClick={playNext}>⏭</button>
+          </div>
         </div>
       )}
 

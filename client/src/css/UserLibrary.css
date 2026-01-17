@@ -17,7 +17,7 @@
 }
 .playlist-song-cover {
   width: 100%;
-  aspect-ratio: 1 / 1; /* 🔥 square */
+  aspect-ratio: 1 / 1; 
   object-fit: cover;
   border-radius: 8px;
 }
@@ -57,7 +57,7 @@
 }
 
 .playlist-create input:focus {
-  border-color: #4f46e5; /* soft indigo */
+  border-color: #4f46e5; 
 }
 
 .playlist-create button {
@@ -147,8 +147,8 @@
 }
 /* PLAYER CONTAINER */
 .player-box {
-  width: 620px;          /* ⬅ was 800px */
-  padding: 8px 12px;    /* ⬅ reduced height */
+  width: 620px;          
+  padding: 8px 12px;  
   border-radius: 8px;
 
   position: fixed;
@@ -159,11 +159,7 @@
 
   background: #111;
   color: #fff;
-  /* box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.35); */
 }
-/* .player-box {
-   backdrop-filter: blur(6px); 
-}  */
 
 /* SONG NAME */
 .player-info {

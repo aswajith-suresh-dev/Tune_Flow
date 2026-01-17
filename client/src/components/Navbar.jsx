@@ -18,14 +18,10 @@ function Navbar({ role, onLogout }) {
             <Link to="/">Home</Link>
 
             {/* Show Login only if NOT already on login page */}
-            {currentPath !== "/login" && (
-              <Link to="/login">Login</Link>
-            )}
+            {currentPath !== "/login" && <Link to="/login">Login</Link>}
 
             {/* Show Signup only if NOT already on signup page */}
-            {currentPath !== "/signup" && (
-              <Link to="/signup">Signup</Link>
-            )}
+            {currentPath !== "/signup" && <Link to="/signup">Signup</Link>}
           </>
         )}
 
@@ -38,11 +34,7 @@ function Navbar({ role, onLogout }) {
         )}
 
         {/* ADMIN */}
-        {role === "admin" && (
-          <>
-            {/* Admin has no nav links */}
-          </>
-        )}
+        {role === "admin" && <>{/* Admin has no nav links */}</>}
       </div>
 
       {/* RIGHT */}

@@ -17,20 +17,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-  
+
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
-      resetPasswordToken: {
-  type: String,
-},
-resetPasswordExpire: {
-  type: Date,
-},
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpire: {
+      type: Date,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const User = mongoose.model("User", userSchema);

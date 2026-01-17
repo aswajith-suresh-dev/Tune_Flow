@@ -28,40 +28,40 @@ function Login({ setRole }) {
   };
 
   return (
-  <div className="auth-container">
-    <div className="auth-card">
-      <h2>Login</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Login</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit">Login</button>
+        </form>
 
-      {error && <p className="auth-message">{error}</p>}
+        {error && <p className="auth-message">{error}</p>}
 
-      <div className="auth-links">
-        <a href="/forgot-password">Forgot password?</a>
-        <br />
-        <a href="/signup">Create an account</a>
+        <div className="auth-links">
+          <a href="/forgot-password">Forgot password?</a>
+          <br />
+          <a href="/signup">Create an account</a>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Login;

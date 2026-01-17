@@ -17,7 +17,7 @@
 
 /* LEFT */
 .nav-left {
-  width: 200px;              /* 🔒 locked width */
+  width: 200px;            
   margin-left: 40px;
   font-weight: 600;
   font-size: 30px;
@@ -28,7 +28,7 @@
 .nav-center {
   flex: 1;                   /* fills remaining space */
   display: flex;
-  justify-content: center;   /* true center */
+  justify-content: center;  
   gap: 24px;
 }
 
@@ -44,7 +44,7 @@
 
 /* RIGHT */
 .nav-right {
-  width: 200px;              /* 🔒 SAME as left */
+  width: 200px;              
   margin-right: 40px;
   display: flex;
   justify-content: flex-end;
@@ -64,9 +64,9 @@
 }
 @media (max-width: 768px) {
   .navbar {
-    height: 90px;          /* 🔒 DO NOT change */
-    padding: 0 16px;       /* horizontal only */
-    flex-wrap: nowrap;     /* 🔒 NO wrapping */
+    height: 90px;          
+    padding: 0 16px;       
+    flex-wrap: nowrap;     
   }
 
   .nav-left {

@@ -69,7 +69,6 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
 
       // ✅ refresh list
       if (onUploadSuccess) onUploadSuccess();
-
     } catch (error) {
       alert(error.message);
     }
@@ -97,7 +96,6 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
 
       // ✅ refresh list
       if (onUploadSuccess) onUploadSuccess();
-
     } catch (error) {
       alert(error.message);
     }
@@ -116,12 +114,9 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
       <h1 className="admin-title">🎛 Admin Dashboard</h1>
 
       <div className="admin-layout">
-
         {/* LEFT: FORM */}
         <div className="admin-form">
-          <h2>
-            {editingSong ? "Edit Song ✏️" : "Upload Song 🎵"}
-          </h2>
+          <h2>{editingSong ? "Edit Song ✏️" : "Upload Song 🎵"}</h2>
 
           <input
             type="text"
@@ -159,7 +154,10 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
           <ul>
             {songs.map((song) => (
               <li key={song._id} className="admin-song-item">
-                <span>{song.title}-{song.artist}</span><br/>
+                <span>
+                  {song.title}-{song.artist}
+                </span>
+                <br />
                 <div className="admin-actions">
                   <button
                     className="admin-edit"
@@ -179,7 +177,6 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
             ))}
           </ul>
         </div>
-
       </div>
     </div>
   );

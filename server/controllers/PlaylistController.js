@@ -25,7 +25,7 @@ export const createPlaylist = async (req, res) => {
 export const getMyPlaylists = async (req, res) => {
   try {
     const playlists = await Playlist.find({ user: req.user.id }).populate(
-      "songs"
+      "songs",
     );
     res.json(playlists);
   } catch (error) {
@@ -53,9 +53,9 @@ export const addSongToPlaylist = async (req, res) => {
       await playlist.save();
     }
 
-    const updatedPlaylist = await Playlist.findById(
-      playlist._id
-    ).populate("songs");
+    const updatedPlaylist = await Playlist.findById(playlist._id).populate(
+      "songs",
+    );
 
     res.json(updatedPlaylist);
   } catch (error) {

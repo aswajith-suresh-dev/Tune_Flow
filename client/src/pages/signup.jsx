@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../css/auth.css"
+import "../css/auth.css";
 function Signup() {
   const navigate = useNavigate();
 
@@ -37,44 +37,44 @@ function Signup() {
   };
 
   return (
-  <div className="auth-container">
-    <div className="auth-card">
-      <h2>Sign Up</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Sign Up</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Create Account</button>
-      </form>
+          <button type="submit">Create Account</button>
+        </form>
 
-      <div className="auth-links">
-        <a href="/login">Already have an account?</a>
+        <div className="auth-links">
+          <a href="/login">Already have an account?</a>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Signup;

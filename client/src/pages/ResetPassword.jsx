@@ -12,7 +12,6 @@ function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 🔁 Auto-fill token if coming from Forgot Password
   useEffect(() => {
     if (location.state?.token) {
       setToken(location.state.token);
@@ -38,9 +37,7 @@ function ResetPassword() {
     <div className="auth-container">
       <div className="auth-box">
         <h2>Reset Password</h2>
-        <p className="auth-subtext">
-          Enter your new password below
-        </p>
+        <p className="auth-subtext">Enter your new password below</p>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <input
@@ -75,11 +72,7 @@ function ResetPassword() {
           </p>
         )}
 
-        {success && (
-          <p className="auth-subtext">
-            Redirecting to login…
-          </p>
-        )}
+        {success && <p className="auth-subtext">Redirecting to login…</p>}
       </div>
     </div>
   );

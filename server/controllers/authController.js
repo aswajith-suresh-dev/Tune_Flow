@@ -53,7 +53,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     res.json({
@@ -115,10 +115,7 @@ export const resetPassword = async (req, res) => {
     }
 
     // 1️⃣ Hash the received token
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(token)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     // 2️⃣ Find user with token & valid expiry
     const user = await User.findOne({
