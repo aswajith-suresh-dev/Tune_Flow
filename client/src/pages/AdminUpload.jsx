@@ -159,8 +159,7 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
           <ul>
             {songs.map((song) => (
               <li key={song._id} className="admin-song-item">
-                <span>{song.title}</span>
-
+                <span>{song.title}-{song.artist}</span><br/>
                 <div className="admin-actions">
                   <button
                     className="admin-edit"

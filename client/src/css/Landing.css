@@ -4,14 +4,13 @@
 
 /* HERO */
 .hero {
-    margin-top:90px;
-  height: 90vh;
+  
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-     /* background-color: #3f2075;  */
   background-color: #0b132b;;
   /* background-color: #0f172a; */
   /* background-image: url(../public/bg.png.jpg);
