@@ -1,8 +1,6 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  min-width: 100vh;
 }
 
 .logo {
@@ -40,7 +38,6 @@
 .read-the-docs {
   color: #888;
 }
-.app-content
-{
-  padding-top:90px;
+.app-content {
+    padding-top: 90px;
 }

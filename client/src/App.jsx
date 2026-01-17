@@ -11,28 +11,28 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserRoute from "./components/UserRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-
+import "./App.css"
 function App() {
   const [songs, setSongs] = useState([]);
   const [role, setRole] = useState(localStorage.getItem("role"));
-const fetchSongs = async () => {
-  try {
-    const res = await fetch("/api/songs");
-    const data = await res.json();
-    setSongs(data);
-  } catch (err) {
-    console.error("Failed to fetch songs", err);
-  }
-};
+  const fetchSongs = async () => {
+    try {
+      const res = await fetch("/api/songs");
+      const data = await res.json();
+      setSongs(data);
+    } catch (err) {
+      console.error("Failed to fetch songs", err);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/songs")
       .then((res) => res.json())
       .then((data) => setSongs(data));
   }, []);
-useEffect(() => {
-  fetchSongs();
-}, []);
+  useEffect(() => {
+    fetchSongs();
+  }, []);
   const handleLogout = () => {
     localStorage.clear();
     setRole(null);
@@ -42,54 +42,48 @@ useEffect(() => {
   return (
     <BrowserRouter>
       <Navbar role={role} onLogout={handleLogout} />
-    
 
-  <div className="app-content">
-    <Routes>{/* routes */}</Routes>
-  </div>
+      <div className="app-content">
+        <Routes>
+          {/* 🌍 Public Landing */}
+          <Route path="/" element={<Landing />} />
 
-      <Routes>
-        {/* 🌍 Public Landing */}
-        <Route path="/" element={<Landing />} />
+          {/* 🎵 User Home */}
+          <Route
+            path="/home"
+            element={
+              <UserRoute>
+                <Home songs={songs} />
+              </UserRoute>
+            }
+          />
 
-        {/* 🎵 User Home */}
-        <Route
-          path="/home"
-          element={
-            <UserRoute>
-              <Home songs={songs} />
-            </UserRoute>
-          }
-        />
+          {/* 📚 User Library */}
+          <Route
+            path="/library"
+            element={
+              <UserRoute>
+                <UserLibrary songs={songs} />
+              </UserRoute>
+            }
+          />
 
-        {/* 📚 User Library */}
-        <Route
-          path="/library"
-          element={
-            <UserRoute>
-              <UserLibrary songs={songs} />
-            </UserRoute>
-          }
-        />
-
-        {/* 🛠 Admin */}
-        <Route
-  path="/admin"
-  element={
-    <ProtectedRoute>
-      <AdminUpload
-        songs={songs}
-        onUploadSuccess={fetchSongs}
-      />
-    </ProtectedRoute>
-  }
-/>
-<Route path="/signup" element={<Signup />} />
-        {/* 🔐 Auth */}
-        <Route path="/login" element={<Login setRole={setRole} />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-      </Routes>
+          {/* 🛠 Admin */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminUpload songs={songs} onUploadSuccess={fetchSongs} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/signup" element={<Signup />} />
+          {/* 🔐 Auth */}
+          <Route path="/login" element={<Login setRole={setRole} />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

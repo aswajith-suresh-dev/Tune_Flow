@@ -46,8 +46,6 @@
 /* HERO */
 .hero {
   display: flex;
-  gap: 40px;
-  margin: 40px 0;
 }
 
 .hero-text {
