@@ -8,7 +8,7 @@ function Navbar({ role, onLogout }) {
   return (
     <nav className="navbar">
       {/* LEFT */}
-      <div className="nav-left">EchoPlay</div>
+      <div className="nav-left">Tune Flow</div>
 
       {/* CENTER */}
       <div className="nav-center">
