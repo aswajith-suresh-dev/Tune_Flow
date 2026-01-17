@@ -111,12 +111,12 @@ function AdminUpload({ onUploadSuccess, songs = [] }) {
   /* ---------------- UI ---------------- */
   return (
     <div className="admin-page">
-      <h1 className="admin-title">🎛 Admin Dashboard</h1>
+      <h1 className="admin-title">Admin Dashboard</h1>
 
       <div className="admin-layout">
         {/* LEFT: FORM */}
         <div className="admin-form">
-          <h2>{editingSong ? "Edit Song ✏️" : "Upload Song 🎵"}</h2>
+          <h2>{editingSong ? "Edit Song " : "Upload Song "}</h2>
 
           <input
             type="text"
