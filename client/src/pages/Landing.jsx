@@ -2,7 +2,7 @@ import "../css/landing.css";
 
 function Landing() {
   return (
-    <div className="landing">
+    <div className="landing"> 
       {/* HERO SECTION */}
       <section className="hero">
         <h1>Feel the Music</h1>
