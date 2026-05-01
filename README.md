@@ -72,17 +72,6 @@ JWT Authentication
 
 
 
-## 📁 Project Structure
-
-TuneFlow
-├── client/        # React frontend
-├── server/        # Express backend
-│   ├── routes
-│   ├── controllers
-│   ├── models
-│   ├── middleware
-│   └── uploads    # Ignored in Git (.gitignore)
-└── README.md
 
 
 
